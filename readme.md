@@ -1,15 +1,16 @@
 **Тестирование работы оператора yield.**
 
 Рабочая среда
+```console
 docker-compose up -d --build
-
-Адрес mysql прописать в /src/MyUtils.php
+```
+Адрес mysql прописать в ***/src/MyUtils.php***
 ```console
 docker inspect tools_php-mysql | grep "IPAddress"
 ```
 
 **1. Создать таблицу через консоль или phpMyadmin**
-файл /db/create_table.sql
+файл ***/db/create_table.sql***
 
 Консоль контейнера MySql 
 ```console
@@ -19,7 +20,8 @@ docker exec -it tools_php-mysql mysql -u root -p
 phpMyAdmin http://localhost:8081
 
 **2. Регистрация процедуры и запуск для заполнения таблицы тестовыми данными.**
-Файл /db/commands.sql
+
+Файл ***/db/commands.sql***.
 Запись 300 тысяч строк может занять более 5 минут. Проверить статус заполнения данными налету в консоли - обычным COUNT запросом.
 
 **3. Очередность запуска скриптов**
