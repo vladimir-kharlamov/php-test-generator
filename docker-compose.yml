@@ -1,0 +1,55 @@
+version: '3.8'
+
+services:
+  php:
+    build: ./Docker/php
+    container_name: tools_php-app
+    working_dir: /var/www/
+    volumes:
+      - ./:/var/www/
+    depends_on:
+      - mysql
+    networks:
+      - tools_php-network
+    
+  mysql:
+    image: mysql:8.0.29
+    container_name: tools_php-mysql
+    restart: on-failure
+    ports:
+      - 3306:3306
+    #command: --default-authentication-plugin=mysql_native_password  
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_ROOT_USER=root
+      - MYSQL_DATABASE=benchmark_test
+    volumes:
+     - ./data/db/mysql:/var/lib/mysql
+    networks:
+      - tools_php-network
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:latest 
+    container_name: tools_php-phpmyadmin
+    restart: unless-stopped
+    environment:
+      - PMA_ARBITRARY=1
+      - UPLOAD_LIMIT=1024M
+      - MEMORY_LIMIT=1024M
+      - MAX_EXECUTION_TIME=300 
+      - PMA_HOST=mysql
+      - PMA_USER=root
+      - PMA_PASSWORD=root  
+    ports:
+      - 8081:80
+    depends_on:
+      - mysql 
+    networks:
+      - tools_php-network        
+
+volumes:
+  mysql_php:
+
+networks:
+  tools_php-network:
+    driver: bridge
